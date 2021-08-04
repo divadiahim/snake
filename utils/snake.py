@@ -9,13 +9,10 @@ class snake:
         self.win=win
         self.grid_init()
         self.draw_grid_init()
-        self.init_snake()
+        self.init_snake(5)
         self.blurSurf(5)
-        self.fade(0,30,1)
-        pygame.event.pump()
-        self.fade(30,0,-1)
-       
-        
+        self.init_fade()
+          
     def grid_init(self):
         self.arr=[]
         for i in range(ROWS):
@@ -39,9 +36,10 @@ class snake:
         self.draw_grid_init()
 
                 
-    def init_snake(self):
+    def init_snake(self,len):
+        self.len=len
         poz=(0,0)
-        self.draw_snake(poz,10)
+        self.draw_snake(poz,self.len)
 
     def blurSurf(self, amt):
         if amt < 1.0:
@@ -55,12 +53,22 @@ class snake:
         pygame.display.update()
 
     def fade(self,start,stop,index):
-        pygame.event.pump()
+       
         fade = pygame.Surface((WIDTH, HEIGHT))
         fade.fill((0,0,0))
         for alpha in range(start, stop,index):
+            pygame.event.pump()
             print(alpha)
             fade.set_alpha(alpha)
+            self.draw_grid_init()
             self.win.blit(fade,(0,0))
             pygame.display.update()
-            pygame.time.delay(40)  
+            pygame.time.delay(5)  
+
+    def init_fade(self):
+        fade = pygame.Surface((WIDTH, HEIGHT))
+        fade.fill((0,0,0))
+        fade.set_alpha(140)
+        self.win.blit(fade,(0,0))
+        pygame.display.update()
+         
