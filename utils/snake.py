@@ -10,7 +10,7 @@ class snake:
         self.grid_init()
         self.draw_grid_init()
         self.init_snake(5)
-        self.blurSurf(5)
+        self.blurSurf(3)
         self.init_fade()
           
     def grid_init(self):
@@ -63,12 +63,12 @@ class snake:
             self.draw_grid_init()
             self.win.blit(fade,(0,0))
             pygame.display.update()
-            pygame.time.delay(5)  
+            pygame.time.delay(2)  
 
     def init_fade(self):
         fade = pygame.Surface((WIDTH, HEIGHT))
         fade.fill((0,0,0))
-        fade.set_alpha(140)
+        fade.set_alpha(110)
         self.win.blit(fade,(0,0))
         pygame.display.update()
          
