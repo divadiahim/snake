@@ -25,22 +25,30 @@ class snake:
             for j,color_val in enumerate(row):
                 pygame.draw.rect(self.win,color_val,(i*PIXEL_SIZE,j*PIXEL_SIZE,PIXEL_SIZE,PIXEL_SIZE))
 
-    def draw_snake(self,poz,len):
-        x_random=random.randint(1,ROWS)
-        y_random=random.randint(1,COLS)
+    def draw_random(self):
+        x_random=random.randint(1,ROWS-1)
+        y_random=random.randint(1,COLS-1)
         self.arr[x_random][y_random]=COLOR
-        
+        self.random_poz=(x_random,y_random)
+        return self.random_poz
+
+    def draw_snake(self,poz,len):
+        # x_random=random.randint(1,ROWS)
+        # y_random=random.randint(1,COLS)
+        # self.arr[x_random][y_random]=COLOR
+        self.draw_random()
         x,y=poz
         for i in range(len):
             self.arr[x][y+i]=SNAKE_COLOR
         self.draw_grid_init()
+        
 
                 
     def init_snake(self,len):
         self.len=len
         poz=(0,0)
         self.draw_snake(poz,self.len)
-
+        return self.random_poz
     def blurSurf(self, amt):
         if amt < 1.0:
             raise ValueError("Arg 'amt' must be greater than 1.0, passed in value is %s"%amt)
@@ -52,7 +60,7 @@ class snake:
         self.win.blit(surf,(0,0))
         pygame.display.update()
 
-    def fade(self,start,stop,index):
+    def fade(self,start,stop,index,blur=False):
        
         fade = pygame.Surface((WIDTH, HEIGHT))
         fade.fill((0,0,0))
@@ -62,6 +70,8 @@ class snake:
             fade.set_alpha(alpha)
             self.draw_grid_init()
             self.win.blit(fade,(0,0))
+            if blur:
+                self.blurSurf(3)
             pygame.display.update()
             pygame.time.delay(2)  
 
