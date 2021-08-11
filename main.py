@@ -1,6 +1,8 @@
+from typing import Collection
 from utils.text import Button_img
 from utils.config import *
 from utils.snake import *
+from utils import sound
 WIN=pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Snake")
 img_run = pygame.image.load("img/image.png").convert_alpha()
@@ -19,7 +21,7 @@ up=False
 down=False
 last_state=0
 #1-left 2-right 3-up 4-down
-x_start=r=u=d=l=x=0
+x_start=r=u=d=l=x=i=0
 y_start=y=0     
 snake_pos=[]
 len=len_old=0
@@ -82,11 +84,13 @@ while(run):
             text.draw(WIN)
             pygame.display.update()
     if running:
-        if(right or left or up or down):
-            moved=True 
+        
 
         if(right):
-            if(snake.arr[x+1][y]==SNAKE_COLOR):
+            if(x==COLS):
+                x=0
+                r=0
+            if(snake.arr[x][y]==SNAKE_COLOR and i>0):
                 sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
             snake_pos.append((x,y))
@@ -95,10 +99,12 @@ while(run):
             r=r+1
             x=x_start+r
             pygame.time.delay(150)
-            
+            print(x)
         
         if(left):
-            if(snake.arr[x-1][y]==SNAKE_COLOR):
+            if(x<0):
+                x=r=COLS-1
+            if(snake.arr[x][y]==SNAKE_COLOR and i>0):
                 sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
             snake_pos.append((x,y))
@@ -107,9 +113,12 @@ while(run):
             r=r-1
             x=x_start+r
             pygame.time.delay(150)
-            
+            print(x)
         if(down):
-            if(snake.arr[x][y+1]==SNAKE_COLOR):
+            if(y==ROWS):
+                y=0
+                d=0
+            if(snake.arr[x][y]==SNAKE_COLOR and i>0):
                 sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
             snake_pos.append((x,y))
@@ -118,9 +127,12 @@ while(run):
             d=d+1
             y=y_start+d
             pygame.time.delay(150)
+            print(y)
             
         if(up):
-            if(snake.arr[x][y-1]==SNAKE_COLOR):
+            if(y<0):
+                y=d=ROWS-1
+            if(snake.arr[x][y]==SNAKE_COLOR and i>0):
                 sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
             snake_pos.append((x,y))
@@ -131,19 +143,28 @@ while(run):
             pygame.time.delay(150)
 
             
-    
+     
         x_random,y_random=random
 
         if(snake.arr[x_random][y_random]==SNAKE_COLOR):
+            sound.Note(500).play(-1)
+            pygame.time.delay(60)
+            pygame.mixer.stop()
             len=len+1
             random=snake.draw_random()
             pygame.display.update()
+
+        if(right or left or up or down):
+            moved=True
+            i=i+1
+
         if(moved):       
             pop(len,len_old)
         # print(len,len_old)
         len_old=len
         
-        
+          
+        # print(x,y)
     # print(snake_pos)
     
 sys.exit()                        
