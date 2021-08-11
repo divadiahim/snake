@@ -28,14 +28,19 @@ def pop(len,len_old):
     if len>len_old:
         pass
     else:
+        len_old=len
         pixel_to_remove=snake_pos[0]
         x_to_remove,y_to_remove=pixel_to_remove
-        snake.arr[x_to_remove][y_to_remove]=BG_COLOR
         snake_pos.pop(0)
-        len_old=len
+        snake.arr[x_to_remove][y_to_remove]=BG_COLOR
         snake.draw_grid_init()
+        # print('''deleted''')
+        # print()
+clock = pygame.time.Clock()        
 while(run):
     
+    # print('a')
+    clock.tick(15)
     for event in pygame.event.get():
         
         if event.type == pygame.QUIT:
@@ -43,23 +48,18 @@ while(run):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT and not(last_state==2):
                 left=True
-                up=False
-                down=False
-                right=False
+                up=down=right=False
                 print("left")
                 last_state=1
             if event.key == pygame.K_RIGHT and not(last_state==1):
                 print("right")
                 right=True
-                up=False
-                down=False
-                left=False
+                up=down=left=False
                 last_state=2
             if event.key == pygame.K_UP and not(last_state==4):
                 print("up")
                 up=True
-                down=False
-                right=left=False
+                right=left=down=False
                 last_state=3
             if event.key == pygame.K_DOWN and not(last_state==3):
                 last_state=4
@@ -75,7 +75,6 @@ while(run):
                 snake.fade(255,0,-1)
                 print("a")
                 # snake.arr[15][15]=SNAKE_COLOR
-            
                 pygame.display.update()
                 
                 running=True
@@ -84,42 +83,55 @@ while(run):
             pygame.display.update()
     if running:
         if(right or left or up or down):
-            moved=True             
+            moved=True 
+
         if(right):
-            snake_pos.append((x,y))
+            if(snake.arr[x+1][y]==SNAKE_COLOR):
+                sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
+            snake_pos.append((x,y))
             snake.draw_grid_init()
             pygame.display.update()
             r=r+1
             x=x_start+r
+            pygame.time.delay(150)
+            
         
         if(left):
-            snake_pos.append((x,y))
+            if(snake.arr[x-1][y]==SNAKE_COLOR):
+                sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
+            snake_pos.append((x,y))
             snake.draw_grid_init()
             pygame.display.update()
             r=r-1
             x=x_start+r
-        
-
+            pygame.time.delay(150)
+            
         if(down):
-            snake_pos.append((x,y))
+            if(snake.arr[x][y+1]==SNAKE_COLOR):
+                sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
+            snake_pos.append((x,y))
             snake.draw_grid_init()
             pygame.display.update()
-            y=y_start+d
             d=d+1
+            y=y_start+d
+            pygame.time.delay(150)
             
-            u=l=0
         if(up):
-            snake_pos.append((x,y))
+            if(snake.arr[x][y-1]==SNAKE_COLOR):
+                sys.exit()
             snake.arr[x][y]=SNAKE_COLOR
+            snake_pos.append((x,y))
             snake.draw_grid_init()
             pygame.display.update()
             d=d-1
             y=y_start+d
-        
-        
+            pygame.time.delay(150)
+
+            
+    
         x_random,y_random=random
 
         if(snake.arr[x_random][y_random]==SNAKE_COLOR):
@@ -128,13 +140,10 @@ while(run):
             pygame.display.update()
         if(moved):       
             pop(len,len_old)
-        print(len,len_old)
+        # print(len,len_old)
         len_old=len
-    # pygame.display.update()                    
-    pygame.time.delay(300)
-    
-    
-   
+        
+        
     # print(snake_pos)
     
 sys.exit()                        

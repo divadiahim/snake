@@ -49,6 +49,7 @@ class snake:
         poz=(0,0)
         self.draw_snake(poz,self.len)
         return self.random_poz
+        
     def blurSurf(self, amt):
         if amt < 1.0:
             raise ValueError("Arg 'amt' must be greater than 1.0, passed in value is %s"%amt)
